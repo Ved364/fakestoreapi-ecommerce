@@ -24,7 +24,7 @@ const CartPage = () => {
             Cart
           </Typography>
 
-          {filteredUserCart.length === 0 ? (
+          {filteredUserCart?.length > 0 ? (
             <Typography textAlign="center">No cart found.</Typography>
           ) : (
             <Stack spacing={3}>
