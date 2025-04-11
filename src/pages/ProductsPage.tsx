@@ -26,7 +26,7 @@ type Props = {
 };
 
 const ProductsPage = (props: Props) => {
-  const { products } = props;
+  const { products = [] } = props;
 
   const { userId } = useGlobalContext();
 
@@ -40,7 +40,7 @@ const ProductsPage = (props: Props) => {
 
   const initialPage = Number(params.get("page")) || 1;
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = Math.ceil((products?.length || 0) / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const paginationProducts = products.slice(
     startIndex,
@@ -77,89 +77,93 @@ const ProductsPage = (props: Props) => {
           <Typography variant="h4" textAlign="center">
             Products
           </Typography>
-          <Stack
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            flexWrap="wrap"
-            gap="25px"
-            mt={4}
-          >
-            {paginationProducts.map((product) => (
-              <Card key={product.id} sx={{ width: 345 }} elevation={6}>
-                <CardMedia
-                  component="img"
-                  src={product.image}
-                  alt={product.title}
-                  height="200px"
-                  sx={{ objectFit: "contain" }}
-                />
-                <CardContent>
-                  <Stack
-                    spacing={1}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Typography variant="h6">
-                      <Tooltip title={product.title}>
-                        <Box
-                          sx={{
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            maxWidth: "250px",
-                          }}
-                        >
-                          {product.title}
-                        </Box>
-                      </Tooltip>
-                    </Typography>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        color: "green",
-                      }}
+          {products?.length > 0 ? (
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              flexWrap="wrap"
+              gap="25px"
+              mt={4}
+            >
+              {paginationProducts.map((product) => (
+                <Card key={product.id} sx={{ width: 345 }} elevation={6}>
+                  <CardMedia
+                    component="img"
+                    src={product.image}
+                    alt={product.title}
+                    height="200px"
+                    sx={{ objectFit: "contain" }}
+                  />
+                  <CardContent>
+                    <Stack
+                      spacing={1}
+                      justifyContent="center"
+                      alignItems="center"
                     >
-                      <CurrencyRupeeIcon />
-                      {product.price}
-                    </Typography>
-                    <Typography variant="h6">
-                      <span style={{ fontWeight: "bold" }}>Category: </span>
-                      {product.category}
-                    </Typography>
-                    <Typography variant="h6">
-                      <Tooltip title={product.description}>
-                        <Box
-                          sx={{
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            maxWidth: "300px",
-                          }}
-                        >
-                          {product.description}
-                        </Box>
-                      </Tooltip>
-                    </Typography>
-                    <Rating
-                      name="read-only"
-                      value={product.rating.rate}
-                      precision={0.5}
-                      readOnly
-                    />
-                    <Button
-                      variant="contained"
-                      onClick={() => handleAddtoCart(product)}
-                    >
-                      Add to Cart
-                    </Button>
-                  </Stack>
-                </CardContent>
-              </Card>
-            ))}
-          </Stack>
+                      <Typography variant="h6">
+                        <Tooltip title={product.title}>
+                          <Box
+                            sx={{
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              maxWidth: "250px",
+                            }}
+                          >
+                            {product.title}
+                          </Box>
+                        </Tooltip>
+                      </Typography>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          color: "green",
+                        }}
+                      >
+                        <CurrencyRupeeIcon />
+                        {product.price}
+                      </Typography>
+                      <Typography variant="h6">
+                        <span style={{ fontWeight: "bold" }}>Category: </span>
+                        {product.category}
+                      </Typography>
+                      <Typography variant="h6">
+                        <Tooltip title={product.description}>
+                          <Box
+                            sx={{
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              maxWidth: "300px",
+                            }}
+                          >
+                            {product.description}
+                          </Box>
+                        </Tooltip>
+                      </Typography>
+                      <Rating
+                        name="read-only"
+                        value={product.rating.rate}
+                        precision={0.5}
+                        readOnly
+                      />
+                      <Button
+                        variant="contained"
+                        onClick={() => handleAddtoCart(product)}
+                      >
+                        Add to Cart
+                      </Button>
+                    </Stack>
+                  </CardContent>
+                </Card>
+              ))}
+            </Stack>
+          ) : (
+            <Typography textAlign="center">No products found.</Typography>
+          )}
           <Pagination
             count={totalPages}
             page={currentPage}

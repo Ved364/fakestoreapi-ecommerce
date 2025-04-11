@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GlobalProvider } from "@/context/global-context";
 import Header from "@/component/Header";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,8 +29,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <GlobalProvider>
-          <Header />
-          {children}
+          <Suspense>
+            <Header />
+            {children}
+          </Suspense>
         </GlobalProvider>
       </body>
     </html>

@@ -25,8 +25,6 @@ const CartPage = () => {
           </Typography>
 
           {filteredUserCart?.length > 0 ? (
-            <Typography textAlign="center">No cart found.</Typography>
-          ) : (
             <Stack spacing={3}>
               {filteredUserCart.map((order, index) => (
                 <Card key={order.id} elevation={6}>
@@ -60,6 +58,8 @@ const CartPage = () => {
                 </Card>
               ))}
             </Stack>
+          ) : (
+            <Typography textAlign="center">No cart found.</Typography>
           )}
         </Container>
       </AuthGuard>

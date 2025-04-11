@@ -2,7 +2,7 @@
 
 import { ICart } from "@/types/cart";
 import { getCart } from "@/utils/cart";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   useCallback,
@@ -30,21 +30,23 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const [userId, setUserId] = useState<string>("");
   const [cartData, setCartData] = useState<ICart[]>([]);
 
+  const router = useRouter();
+
   const login = (username: string) => {
     setUserId(username);
-    redirect("/");
+    router.push("/");
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("id");
     setUserId("");
-    redirect("/login");
+    router.push("/login");
   };
 
-  const filteredUserCart = cartData.filter(
-    (order) => order.userId === Number(userId)
-  );
+  const filteredUserCart: ICart[] = userId
+    ? cartData.filter((order) => order.userId === Number(userId))
+    : [];
 
   const totalQuantityCount = filteredUserCart.reduce((total, cart) => {
     const cartTotal = cart.products.reduce(
